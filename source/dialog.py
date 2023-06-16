@@ -21,7 +21,7 @@ from flet import (AlertDialog,
 
 from flet_core import RoundedRectangleBorder, CountinuosRectangleBorder
 
-txt_content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed https://flet.dev/docs/controls/markdown#on_tap_link do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+txt_content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed https://flet.dev/docs/controls/markdown#on_tap_link do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n **Ut enim ad minim veniam**, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ~~commodo consequat~~. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur _sint occaecat cupidatat non proident_, sunt in culpa qui officia deserunt *mollit anim id est laborum.*"
 
 
 class ModalDialog(AlertDialog):
@@ -67,16 +67,33 @@ class ModalDialog(AlertDialog):
 
         return tabs
 
+    def page_resize(self, e):
+        if self.app.width <= 635:
+            if self.side_column in self.main_row.controls:
+                self.side_column.visible = False
+                self.under_colum.content = self.side_container
+                self.under_colum.visible = True
+
+        else:
+            self.side_column.visible = True
+            self.side_container.visible = True
+            self.under_colum.visible = False
+
+        self.update()
+        print(self.app.width)
+
     def close_dlg(self, e):
         self.open = False
 
     def __init__(self, app):
+
         super(ModalDialog, self).__init__()
         self.modal = False
         self.shape = CountinuosRectangleBorder()
         self.shape.radius = 3.0
         self.content_padding = 0.0
         self.actions_padding = 0.0
+        self.app = app
 
         button_delete = IconButton(icons.DELETE, icon_size=20,
                                    style=flet.ButtonStyle(
@@ -94,14 +111,15 @@ class ModalDialog(AlertDialog):
                                         "hovered": colors.LIGHT_BLUE_400}
                                    ))
 
-        header_options = Row([
+        header_options = Container(Row([
             button_delete,
             button_play,
             button_attach,
         ],
             alignment=flet.MainAxisAlignment.END,
             vertical_alignment=flet.CrossAxisAlignment.CENTER,
-            width=215
+            width=185),
+            margin=flet.margin.only(25, 10, 10, 10)
         )
 
         style = flet.TextStyle(weight=flet.FontWeight.W_500)
@@ -169,29 +187,32 @@ class ModalDialog(AlertDialog):
                                            text_size=13,
                                            on_blur=update_description_text)
 
-        side_column = Column(
-            [Container(Row(controls=[Text("oi")]), expand=True, bgcolor=colors.GREY_200)],
+        self.side_container = Container(Row(controls=[Text("oi")]), expand=True, bgcolor='#f5f5f5')
+        self.side_column = Column(
+            [self.side_container],
             width=210,
             alignment=flet.alignment.top_right
         )
-
         tabs_content = self.tab_content_build()
+        self.main_row = Row([tabs_content, self.side_column], expand=True, spacing=10)
+        self.under_colum = Container(height=200, bgcolor=colors.AMBER_200, visible=False, expand=True)
 
-        content = Container(
-
-            content=Column(
+        self.main_column = Column(
                 [
                     header,
-                    Container(Row([tabs_content, side_column], expand=True, spacing=10),
+                    Container(self.main_row,
                               bgcolor=colors.WHITE,
                               expand=True,
                               padding=flet.padding.only(10, 0, 0, 0),
-                              margin=0)
+                              margin=0),
+                    self.under_colum
                 ],
                 expand=True,
                 spacing=0,
-            ),
+            )
 
+        content = Container(
+            content=self.main_column,
             bgcolor=colors.WHITE,
             width=700,
             height=550,
@@ -200,4 +221,5 @@ class ModalDialog(AlertDialog):
         )
 
         self.content = content
+        self.app.on_resize = self.page_resize
         self.actions_alignment = MainAxisAlignment.END

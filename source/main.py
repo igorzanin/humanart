@@ -1,3 +1,4 @@
+import flet
 import flet as ft
 import dialog
 
