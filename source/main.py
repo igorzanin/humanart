@@ -6,6 +6,9 @@ def main(page: ft.Page):
     page.title = "AlertDialog examples"
     page.theme_mode = 'light'
 
+    page.window_maximized = True
+    page.window_min_width = 450
+
     dlg = ft.AlertDialog(
         title=ft.Text("Hello, you!"), on_dismiss=lambda e: print("Dialog dismissed!")
     )
@@ -16,7 +19,8 @@ def main(page: ft.Page):
         page.update()
 
     def open_dlg_modal(e):
-        page.dialog = dialog.ModalDialog()
+
+        page.dialog = dialog.ModalDialog(page)
         page.dialog.open = True
         page.update()
 
