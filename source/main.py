@@ -1,6 +1,7 @@
 import flet
 import flet as ft
 import dialog
+import job_popup
 
 
 def main(page: ft.Page):
@@ -24,11 +25,22 @@ def main(page: ft.Page):
         page.dialog = dialog.ModalDialog(page)
         page.dialog.open = True
         page.update()
+        # page.dialog.page_resize(e)
+
+    def open_dlg_modal_2(e):
+
+        page.dialog = job_popup.JobPopup(page)
+        page.dialog.open = True
+        page.update()
+        # page.dialog.page_resize(e)
 
     page.add(
         ft.ElevatedButton("Open dialog", on_click=open_dlg),
         ft.ElevatedButton("Open modal dialog", on_click=open_dlg_modal),
+        ft.ElevatedButton("Open modal dialog 2", on_click=open_dlg_modal_2),
     )
+
+    page.scroll = flet.ScrollMode.AUTO
 
 
 ft.app(target=main)

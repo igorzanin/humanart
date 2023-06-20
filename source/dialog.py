@@ -16,7 +16,8 @@ from flet import (AlertDialog,
                   Tabs,
                   Tab,
                   TextField,
-                  Markdown
+                  Markdown,
+                  ResponsiveRow
                   )
 
 from flet_core import RoundedRectangleBorder, CountinuosRectangleBorder
@@ -32,19 +33,25 @@ class ModalDialog(AlertDialog):
             Column([
                 Text("Descrição:"),
                 self.description_input,
-                self.description_container
-
+                self.description_container,
+                self.description_container,
+                self.description_container,
             ],
-                scroll=flet.ScrollMode.AUTO)
+                # wrap=True,
+                expand=False,
+                scroll=flet.ScrollMode.ALWAYS
+            )
         ),
+            bgcolor=colors.BROWN,
             padding=flet.padding.only(5, 15, 5, 5),
-            border=flet.border.only(top=flet.border.BorderSide(1, '#dbdbdb'))
+            border=flet.border.only(top=flet.border.BorderSide(1, '#dbdbdb')),
+            expand=True,
         )
 
         tab2 = Container(
             Column(controls=[Text('Texto Tab 2')]),
             bgcolor=colors.PURPLE,
-            expand=True,
+            expand=False,
             border=flet.border.only(top=flet.border.BorderSide(1, '#dbdbdb'))
 
         )
@@ -52,19 +59,26 @@ class ModalDialog(AlertDialog):
         tab3 = Container(
             Column(controls=[Text('Texto Tab 3')]),
             bgcolor=colors.LIME_50,
-            expand=True,
+            expand=False,
             border=flet.border.only(top=flet.border.BorderSide(1, '#dbdbdb'))
         )
 
-        tabs = Tabs(
-            selected_index=0,
-            animation_duration=250,
-            tabs=[
-                Tab(text='Detalhes', content=tab1),
-                Tab(text='Arquivos', content=tab2),
-                Tab(text="Artbook", content=tab3)
-            ], expand=True)
-
+        tabs = Container(
+            Column([Tabs(
+                selected_index=0,
+                animation_duration=250,
+                tabs=[
+                    Tab(text='Detalhes', content=tab1),
+                    Tab(text='Arquivos', content=tab2),
+                    Tab(text="Artbook", content=tab3)
+                ])],
+                # scroll=flet.ScrollMode.AUTO,
+            ),
+            bgcolor=colors.PINK,
+            # col={"sm": 2},
+            expand=True,
+            padding=10,
+        )
         return tabs
 
     def page_resize(self, e):
@@ -73,11 +87,13 @@ class ModalDialog(AlertDialog):
                 self.side_column.visible = False
                 self.under_colum.content = self.side_container
                 self.under_colum.visible = True
+                self.content.height = None
 
         else:
             self.side_column.visible = True
             self.side_container.visible = True
             self.under_colum.visible = False
+            self.content.height = 550
 
         self.update()
         print(self.app.width)
@@ -190,36 +206,70 @@ class ModalDialog(AlertDialog):
         self.side_container = Container(Row(controls=[Text("oi")]), expand=True, bgcolor='#f5f5f5')
         self.side_column = Column(
             [self.side_container],
-            width=210,
-            alignment=flet.alignment.top_right
+            # expand=True,
+            alignment=flet.alignment.top_right,
+            visible=True,
+            col={"sm": 1},
         )
-        tabs_content = self.tab_content_build()
-        self.main_row = Row([tabs_content, self.side_column], expand=True, spacing=10)
-        self.under_colum = Container(height=200, bgcolor=colors.AMBER_200, visible=False, expand=True)
+        tab_header = Container(
+            Text("Opções"),
+            bgcolor=colors.WHITE,
+            height=35,
+            # expand=True
+        )
+
+        self.tabs_content = Column([
+            self.description_container,
+            self.description_container,
+            self.description_container
+        ],
+            expand=True,
+            # scroll=flet.ScrollMode.AUTO
+        )
+
+        tab_content = Column([
+            tab_header,
+            self.tabs_content
+        ],
+            expand=True,
+            scroll=flet.ScrollMode.AUTO,
+            col={"sm": 2},
+        )
+        self.main_row = ResponsiveRow([tab_content, self.side_column],
+                                      expand=True,
+                                      columns=3,
+                                      vertical_alignment=flet.CrossAxisAlignment.STRETCH,
+                                      spacing=10,
+                                      )
 
         self.main_column = Column(
                 [
-                    header,
+                    Container(header),
                     Container(self.main_row,
-                              bgcolor=colors.WHITE,
+                              bgcolor=colors.BROWN,
                               expand=True,
-                              padding=flet.padding.only(10, 0, 0, 0),
-                              margin=0),
-                    self.under_colum
+                              padding=flet.padding.only(0, 0, 0, 0),
+                              margin=0,
+                              # height=550,
+                              alignment=flet.alignment.center),
                 ],
                 expand=True,
                 spacing=0,
             )
 
         content = Container(
-            content=self.main_column,
+            content=Column([self.main_column],
+                           expand=True,
+                           # scroll=flet.ScrollMode.AUTO
+                           ),
             bgcolor=colors.WHITE,
             width=700,
             height=550,
             padding=0,
-            margin=0
+            margin=0,
+            expand=False
         )
 
         self.content = content
-        self.app.on_resize = self.page_resize
+        # self.app.on_resize = self.page_resize
         self.actions_alignment = MainAxisAlignment.END
