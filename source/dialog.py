@@ -20,18 +20,6 @@ from flet import (AlertDialog,
                   ResponsiveRow
                   )
 
-from datetime import datetime
-import pglet
-from pglet import DatePicker
-
-# with pglet.page("datepicker-allow-text-input") as page:
-#   now = datetime.now()
-#   page.add(
-#     DatePicker(width=150, label="Allow text input", allow_text_input=True),
-#     DatePicker(label="Allow text input with placeholder", placeholder='Select date...', allow_text_input=True, width='25%'),
-#     DatePicker(value=now, label="Required", required=True, allow_text_input=True))
-
-
 from flet_core import RoundedRectangleBorder, CountinuosRectangleBorder
 
 txt_content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed https://flet.dev/docs/controls/markdown#on_tap_link do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n **Ut enim ad minim veniam**, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ~~commodo consequat~~. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur _sint occaecat cupidatat non proident_, sunt in culpa qui officia deserunt *mollit anim id est laborum.*"
@@ -57,7 +45,6 @@ class ModalDialog(AlertDialog):
         tab2 = Container(
             Column(controls=[
                 Text('Texto Tab 2'),
-                DatePicker(width=150, label="Allow text input", allow_text_input=True),
             ]),
             bgcolor=colors.PURPLE,
             border=flet.border.only(top=flet.border.BorderSide(1, '#dbdbdb'))
