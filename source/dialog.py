@@ -16,8 +16,21 @@ from flet import (AlertDialog,
                   Tabs,
                   Tab,
                   TextField,
-                  Markdown
+                  Markdown,
+                  ResponsiveRow
                   )
+
+from datetime import datetime
+import pglet
+from pglet import DatePicker
+
+# with pglet.page("datepicker-allow-text-input") as page:
+#   now = datetime.now()
+#   page.add(
+#     DatePicker(width=150, label="Allow text input", allow_text_input=True),
+#     DatePicker(label="Allow text input with placeholder", placeholder='Select date...', allow_text_input=True, width='25%'),
+#     DatePicker(value=now, label="Required", required=True, allow_text_input=True))
+
 
 from flet_core import RoundedRectangleBorder, CountinuosRectangleBorder
 
@@ -37,14 +50,16 @@ class ModalDialog(AlertDialog):
             ],
                 scroll=flet.ScrollMode.AUTO)
         ),
-            padding=flet.padding.only(5, 15, 5, 5),
+            padding=flet.padding.only(0, 15, 0, 15),
             border=flet.border.only(top=flet.border.BorderSide(1, '#dbdbdb'))
         )
 
         tab2 = Container(
-            Column(controls=[Text('Texto Tab 2')]),
+            Column(controls=[
+                Text('Texto Tab 2'),
+                DatePicker(width=150, label="Allow text input", allow_text_input=True),
+            ]),
             bgcolor=colors.PURPLE,
-            expand=True,
             border=flet.border.only(top=flet.border.BorderSide(1, '#dbdbdb'))
 
         )
@@ -52,7 +67,6 @@ class ModalDialog(AlertDialog):
         tab3 = Container(
             Column(controls=[Text('Texto Tab 3')]),
             bgcolor=colors.LIME_50,
-            expand=True,
             border=flet.border.only(top=flet.border.BorderSide(1, '#dbdbdb'))
         )
 
@@ -63,24 +77,11 @@ class ModalDialog(AlertDialog):
                 Tab(text='Detalhes', content=tab1),
                 Tab(text='Arquivos', content=tab2),
                 Tab(text="Artbook", content=tab3)
-            ], expand=True)
+            ],
+            height=400,
+        )
 
         return tabs
-
-    def page_resize(self, e):
-        if self.app.width <= 635:
-            if self.side_column in self.main_row.controls:
-                self.side_column.visible = False
-                self.under_colum.content = self.side_container
-                self.under_colum.visible = True
-
-        else:
-            self.side_column.visible = True
-            self.side_container.visible = True
-            self.under_colum.visible = False
-
-        self.update()
-        print(self.app.width)
 
     def close_dlg(self, e):
         self.open = False
@@ -170,7 +171,7 @@ class ModalDialog(AlertDialog):
                                          extension_set=flet.MarkdownExtensionSet.GITHUB_FLAVORED)
 
         def hover_txt_container(e):
-            e.control.bgcolor = "#f5f5f5" if e.data == "true" else "white"
+            e.control.bgcolor = "#f5f5f5" if e.data == "true" else None
             e.control.update()
 
         self.description_container = Container(self.description_text,
@@ -187,39 +188,51 @@ class ModalDialog(AlertDialog):
                                            text_size=13,
                                            on_blur=update_description_text)
 
-        self.side_container = Container(Row(controls=[Text("oi")]), expand=True, bgcolor='#f5f5f5')
+        self.side_container = Container(Row(controls=[Text("oi")]),
+                                        bgcolor='#f5f5f5',
+                                        height=300
+                                        )
         self.side_column = Column(
             [self.side_container],
             width=210,
-            alignment=flet.alignment.top_right
+            alignment=flet.alignment.top_right,
+            col={"xs": 3, "sm": 1}
         )
-        tabs_content = self.tab_content_build()
-        self.main_row = Row([tabs_content, self.side_column], expand=True, spacing=10)
-        self.under_colum = Container(height=200, bgcolor=colors.AMBER_200, visible=False, expand=True)
+        tabs_content = Container(self.tab_content_build(),
+                                 # width=float("inf"),
+                                 # margin=flet.margin.only(10, 0, 10, 0),
+                                 # margin=0,
+                                 padding=flet.padding.only(20, 0, 20, 0),
+                                 col={"xs": 3, "sm": 2},
+                                 bgcolor=colors.WHITE
+                                 )
+
+        self.main_row = ResponsiveRow([tabs_content, self.side_column],
+                                      spacing=0,
+                                      columns=3
+                                      )
 
         self.main_column = Column(
-                [
-                    header,
-                    Container(self.main_row,
-                              bgcolor=colors.WHITE,
-                              expand=True,
-                              padding=flet.padding.only(10, 0, 0, 0),
-                              margin=0),
-                    self.under_colum
-                ],
-                expand=True,
-                spacing=0,
-            )
+            [
+                header,
+                Container(self.main_row,
+                          # margin=flet.margin.only(20, 0, 20, 0),
+                          margin=0,
+                          padding=0,
+                          ),
+            ],
+            spacing=0,
+            scroll=flet.ScrollMode.AUTO,
+        )
 
         content = Container(
             content=self.main_column,
-            bgcolor=colors.WHITE,
+            bgcolor="#f5f5f5",
+            # height=550,
             width=700,
-            height=550,
             padding=0,
-            margin=0
+            margin=0,
         )
 
         self.content = content
-        self.app.on_resize = self.page_resize
         self.actions_alignment = MainAxisAlignment.END
