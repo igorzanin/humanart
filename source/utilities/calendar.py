@@ -1,8 +1,12 @@
+import locale
+
 import flet as ft
 import datetime
 import calendar
 from calendar import HTMLCalendar
 from dateutil import relativedelta
+
+locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
 
 '''
 FletCalendar in Python.
@@ -36,11 +40,14 @@ class FletCalendar(ft.UserControl):
         self.set_theme()
 
         # Init the container control.
-        self.calendar_container = ft.Container(width=355, height=300,
+        self.calendar_container = ft.Container(width=355, height=310,
                                                padding=ft.padding.all(2),
                                                border=ft.border.all(2, self.border_color),
-                                               border_radius=ft.border_radius.all(10),
-                                               alignment=ft.alignment.bottom_center)
+                                               border_radius=ft.border_radius.all(5),
+                                               alignment=ft.alignment.bottom_center,
+                                               # bgcolor=ft.colors.WHITE,
+                                               )
+
         self.build()  # Build the calendar.
         self.output = ft.Text()  # Add output control.
 
@@ -54,7 +61,12 @@ class FletCalendar(ft.UserControl):
     def selected_date(self, e):
         '''User selected date'''
         self.output.value = e.control.data
-        self.output.update()
+        self.current_month = e.control.data[0]
+        self.current_day = e.control.data[1]
+        self.current_year = e.control.data[2]
+        # self.output.update()
+        self.build()
+        self.calendar_container.update()
         # return e.control.data
 
     def set_current_date(self):
@@ -63,8 +75,8 @@ class FletCalendar(ft.UserControl):
         self.current_month = today.month
         self.current_day = today.day
         self.current_year = today.year
-        self.build()
-        self.calendar_container.update()
+        # self.build()
+        # self.update()
 
     def get_next(self, e):
         '''Move to the next month.'''
@@ -94,74 +106,102 @@ class FletCalendar(ft.UserControl):
         cal = HTMLCalendar()
         return cal.monthdayscalendar(self.current_year, self.current_month)
 
-    def set_theme(self, border_color=ft.colors.PINK_700,
-                  text_color=ft.colors.PINK_50,
-                  current_day_color=ft.colors.PINK_700):
+    def set_theme(self,
+                  border_color=ft.colors.GREY_400,
+                  text_color=ft.colors.GREY_900,
+                  current_day_color=ft.colors.BLUE_ACCENT,
+                  selected_button=ft.colors.PURPLE, ):
+
         self.border_color = border_color
         self.text_color = text_color
         self.current_day_color = current_day_color
+        self.selected_button = selected_button
 
     def build(self):
         '''Build the calendar for flet.'''
+
         current_calendar = self.get_calendar()
 
         str_date = '{0} {1}, {2}'.format(calendar.month_name[self.current_month], self.current_day, self.current_year)
 
         date_display = ft.Text(str_date, text_align='center', size=20, color=self.text_color)
-        next_button = ft.Container(ft.Text('>', text_align='right', size=20, color=self.text_color),
-                                   on_click=self.get_next)
+
+        next_button = ft.Container(
+            ft.IconButton(ft.icons.ARROW_FORWARD_IOS_ROUNDED, icon_size=20,
+                          style=ft.ButtonStyle(
+                              {"": ft.colors.GREY_400,
+                               "hovered": ft.colors.BLUE_ACCENT}
+                          )),
+            on_click=self.get_next)
+
         div = ft.Divider(height=1, thickness=2.0, color=self.border_color)
-        prev_button = ft.Container(ft.Text('<', text_align='left', size=20, color=self.text_color),
-                                   on_click=self.get_prev)
+
+        prev_button = ft.Container(
+            ft.IconButton(ft.icons.ARROW_BACK_IOS_NEW_ROUNDED, icon_size=20,
+                          style=ft.ButtonStyle(
+                              {"": ft.colors.GREY_400,
+                               "hovered": ft.colors.BLUE_ACCENT}
+                          )),
+            on_click=self.get_prev)
 
         calendar_column = ft.Column(
             [ft.Row([prev_button, date_display, next_button], alignment=ft.MainAxisAlignment.SPACE_EVENLY,
                     vertical_alignment=ft.CrossAxisAlignment.CENTER, height=40, expand=False), div],
             spacing=2, width=355, height=330, alignment=ft.MainAxisAlignment.START, expand=False)
+
         # Loop weeks and add row.
         for week in current_calendar:
             week_row = ft.Row(alignment=ft.MainAxisAlignment.CENTER)
             # Loop days and add days to row.
             for day in week:
                 if day > 0:
+                    # print(day)
                     is_current_day_font = ft.FontWeight.W_300
-                    is_current_day_bg = ft.colors.TRANSPARENT
+                    is_current_day_bg = ft.colors.WHITE
                     display_day = str(day)
                     if len(str(display_day)) == 1: display_day = '0%s' % display_day
                     if day == self.current_day:
                         is_current_day_font = ft.FontWeight.BOLD
                         is_current_day_bg = self.current_day_color
 
-                    day_button = ft.Container(
-                        content=ft.Text(str(display_day), weight=is_current_day_font, color=self.text_color),
-                        on_click=self.selected_date, data=(self.current_month, day, self.current_year),
-                        width=40, height=40, ink=True, alignment=ft.alignment.center,
-                        border_radius=ft.border_radius.all(10),
-                        bgcolor=is_current_day_bg)
+                    date_button = ft.TextButton(text=display_day,
+                                                width=40,
+                                                height=40,
+                                                aspect_ratio=1,
+                                                data=(self.current_month, day, self.current_year),
+                                                on_click=self.selected_date,
+                                                style=ft.ButtonStyle(color=ft.colors.BLACK,
+                                                                     bgcolor=is_current_day_bg,
+                                                                     padding=0,
+                                                                     shape={
+                                                                         ft.MaterialState.DEFAULT: ft.RoundedRectangleBorder(
+                                                                             radius=2)
+                                                                     },
+                                                                     )
+                                                )
+                    day_button = ft.Container(date_button,
+                                              # on_click=self.selected_date,
+                                              data=(self.current_month, day, self.current_year),
+                                              width=40,
+                                              height=40,
+                                              ink=True,
+                                              alignment=ft.alignment.center,
+                                              border_radius=ft.border_radius.all(0),
+                                              padding=0,
+                                              margin=0,
+                                              bgcolor="#fafafa"
+                                              )
+
                 else:
-                    day_button = ft.Container(width=40, height=40, border_radius=ft.border_radius.all(10))
+                    day_button = ft.Container(width=40,
+                                              height=40,
+                                              border_radius=ft.border_radius.all(0))
 
                 week_row.controls.append(day_button)
 
             # Add the weeks to the main column.
             calendar_column.controls.append(week_row)
+
         # Add column to our page container.
         self.calendar_container.content = calendar_column
         return self.calendar_container
-
-
-def main(page: ft.Page):
-    page.theme = ft.theme.Theme(color_scheme_seed=ft.colors.PINK)
-    page.dark_theme = ft.theme.Theme(color_scheme_seed=ft.colors.PINK)
-
-    # Instantiate the FletCalendar class.
-    mycal = FletCalendar(page)
-
-    # Add to our application.
-    page.add(mycal, mycal.output)
-
-    page.update()
-
-
-ft.app(target=main)
-

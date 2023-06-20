@@ -1,11 +1,15 @@
 import flet
 import flet as ft
 import dialog
+from utilities.calendar import FletCalendar
 
 
 def main(page: ft.Page):
     page.title = "AlertDialog examples"
     page.theme_mode = 'light'
+    page.calendar = FletCalendar(page)
+    page.calendar_output = page.calendar.output
+    page.add(page.calendar, page.calendar.output)
 
     page.window_maximized = True
     page.window_min_width = 450

@@ -1,26 +1,21 @@
 import flet
-import flet_core
 from flet import (AlertDialog,
-                  TextButton,
                   Text,
                   MainAxisAlignment,
                   Container,
                   Row,
                   colors,
-                  alignment,
                   Column,
-                  Slider,
-                  border_radius,
                   IconButton,
                   icons,
                   Tabs,
                   Tab,
                   TextField,
                   Markdown,
-                  ResponsiveRow
+                  ResponsiveRow,
+                  CountinuosRectangleBorder
                   )
-
-from flet_core import RoundedRectangleBorder, CountinuosRectangleBorder
+from utilities.calendar import FletCalendar
 
 txt_content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed https://flet.dev/docs/controls/markdown#on_tap_link do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n **Ut enim ad minim veniam**, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ~~commodo consequat~~. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur _sint occaecat cupidatat non proident_, sunt in culpa qui officia deserunt *mollit anim id est laborum.*"
 
@@ -39,7 +34,9 @@ class ModalDialog(AlertDialog):
                 scroll=flet.ScrollMode.AUTO)
         ),
             padding=flet.padding.only(0, 15, 0, 15),
-            border=flet.border.only(top=flet.border.BorderSide(1, '#dbdbdb'))
+            border=flet.border.only(top=flet.border.BorderSide(1, '#dbdbdb')),
+            bgcolor=colors.TRANSPARENT,
+
         )
 
         tab2 = Container(
@@ -52,18 +49,22 @@ class ModalDialog(AlertDialog):
         )
 
         tab3 = Container(
-            Column(controls=[Text('Texto Tab 3')]),
-            bgcolor=colors.LIME_50,
-            border=flet.border.only(top=flet.border.BorderSide(1, '#dbdbdb'))
+            Column(controls=[
+                self.calendar.output,
+                Container(self.calendar.calendar_container),
+            ]),
+            border=flet.border.only(top=flet.border.BorderSide(1, '#dbdbdb')),
+            alignment=flet.alignment.center,
         )
 
         tabs = Tabs(
             selected_index=0,
             animation_duration=250,
+            scrollable=True,
             tabs=[
                 Tab(text='Detalhes', content=tab1),
                 Tab(text='Arquivos', content=tab2),
-                Tab(text="Artbook", content=tab3)
+                Tab(text="Artbook", content=tab3),
             ],
             height=400,
         )
@@ -82,6 +83,7 @@ class ModalDialog(AlertDialog):
         self.content_padding = 0.0
         self.actions_padding = 0.0
         self.app = app
+        self.calendar = FletCalendar(app)
 
         button_delete = IconButton(icons.DELETE, icon_size=20,
                                    style=flet.ButtonStyle(
