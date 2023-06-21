@@ -6,7 +6,6 @@ import calendar
 from calendar import HTMLCalendar
 from dateutil import relativedelta
 
-
 locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
 
 '''
@@ -32,6 +31,7 @@ https://docs.python.org/3/library/venv.html
 
 calendar.setfirstweekday(calendar.SUNDAY)
 
+
 def get_calendar(year, month):
     # Obter o calendário usando monthcalendar()
     cal = calendar.monthcalendar(year, month)
@@ -55,11 +55,11 @@ class FletCalendar(ft.UserControl):
 
         self.calendar_container = ft.Container(
             width=280,
-            height=280,
+            # height=280,
             padding=ft.padding.all(5),
-            border=ft.border.all(1, self.border_color),
+            border=ft.border.all(0, self.border_color),
             border_radius=ft.border_radius.all(5),
-            alignment=ft.alignment.bottom_center,
+            alignment=ft.alignment.center,
         )
 
         self.build()  # Build the calendar.
@@ -89,8 +89,8 @@ class FletCalendar(ft.UserControl):
         self.current_month = today.month
         self.current_day = today.day
         self.current_year = today.year
-        # self.build()
-        # self.update()
+        self.build()
+        self.update()
 
     def get_next(self, e):
         '''Move to the next month.'''
@@ -144,7 +144,7 @@ class FletCalendar(ft.UserControl):
 
         next_button = ft.Container(
             ft.IconButton(ft.icons.ARROW_FORWARD_IOS_ROUNDED,
-                          on_click=self.get_prev,
+                          on_click=self.get_next,
                           icon_size=18,
                           aspect_ratio=1,
                           style=ft.ButtonStyle(
@@ -202,7 +202,6 @@ class FletCalendar(ft.UserControl):
                         is_current_day_bg = self.current_day_color
                         is_current_day_color = ft.colors.WHITE
                         button_radius = 100
-
 
                     date_button = ft.TextButton(text=display_day,
                                                 width=33,

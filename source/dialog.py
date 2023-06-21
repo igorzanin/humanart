@@ -20,6 +20,29 @@ from utilities.calendar import FletCalendar
 txt_content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed https://flet.dev/docs/controls/markdown#on_tap_link do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n **Ut enim ad minim veniam**, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea ~~commodo consequat~~. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur _sint occaecat cupidatat non proident_, sunt in culpa qui officia deserunt *mollit anim id est laborum.*"
 
 
+class CalendarPopup(AlertDialog):
+
+    def close_dlg(self, e):
+        self.mother.open = True
+        self.mother.update()
+        self.open = False
+
+    def __init__(self, app, mother_popup: AlertDialog):
+        super(CalendarPopup, self).__init__()
+        calendar = FletCalendar(app)
+        column = Column([
+            calendar.output,
+            calendar,
+        ])
+        self.content = Container(calendar, bgcolor='white', expand=False, height=300, border_radius=10)
+        self.shape = CountinuosRectangleBorder()
+        self.shape.radius = 10.0
+        self.content_padding = 0.0
+        self.actions_padding = 0.0
+        self.mother = mother_popup
+        # self.on_dismiss = self.close_dlg    #if you want to close current popup uncomment this lines
+
+
 class ModalDialog(AlertDialog):
 
     def tab_content_build(self):
@@ -72,8 +95,26 @@ class ModalDialog(AlertDialog):
 
         return tabs
 
+    def on_resize(self, e):
+        if self.page.width < 576.0:
+            self.menubutton.visible = True
+            self.buttons_line.visible = False
+            self.update()
+        else:
+            self.menubutton.visible = False
+            self.buttons_line.visible = True
+            self.update()
+
+
     def close_dlg(self, e):
-        self.open = False
+        if self.popup_view is True:
+            self.popup_view = False
+            self.open = True
+            self.content = self.popup_content
+            self.update()
+        else:
+            self.open = False
+            self.app.update()
 
     def __init__(self, app):
 
@@ -85,31 +126,78 @@ class ModalDialog(AlertDialog):
         self.actions_padding = 0.0
         self.app = app
         self.calendar = FletCalendar(app)
+        self.popup_view = False
+        self.on_dismiss = self.close_dlg
+        self.popup_calendar = Container(self.calendar,
+                                        bgcolor='white',
+                                        expand=False,
+                                        height=300,
+                                        padding=flet.padding.only(20, 20, 20, 25)
+                                        )
 
         button_delete = IconButton(icons.DELETE, icon_size=20,
+                                   col={"xs": 0, "sm": 1},
                                    style=flet.ButtonStyle(
                                        {"": colors.GREY_400,
                                         "hovered": colors.RED}
                                    ))
         button_play = IconButton(icons.PLAY_CIRCLE, icon_size=20,
+                                 col=1,
                                  style=flet.ButtonStyle(
                                      {"": colors.GREY_400,
                                       "hovered": colors.LIGHT_BLUE_400}
                                  ))
         button_attach = IconButton(icons.ATTACH_FILE, icon_size=20,
+                                   col=1,
                                    style=flet.ButtonStyle(
                                        {"": colors.GREY_400,
                                         "hovered": colors.LIGHT_BLUE_400}
                                    ))
 
-        header_options = Container(Row([
-            button_delete,
-            button_play,
-            button_attach,
-        ],
+        self.buttons_line = Row(
+            [button_delete,
+             button_play,
+             button_attach
+             ],
+            width=185,
+            spacing=0,
             alignment=flet.MainAxisAlignment.END,
+        )
+
+        def open_calendar(e):
+            # self.popup_view = True
+            # self.content = self.popup_calendar
+            # self.update()
+
+            # bottom sheet alternative ===============================
+            # bottom_sheet = flet.BottomSheet(content=self.calendar)
+            # self.page.add(bottom_sheet)
+            # bottom_sheet.open = True
+            # bottom_sheet.update()
+            #
+            # popup alternative ======================================
+            popup_calendar = CalendarPopup(app, self)
+            self.page.add(popup_calendar)
+            popup_calendar.open = True
+            popup_calendar.update()
+            # self.open = False       #if you want to close current popup uncomment this lines
+            # self.update()
+
+        self.menubutton = IconButton(icons.MORE_VERT,
+                                     visible=False,
+                                     icon_size=20,
+                                     on_click=open_calendar,
+                                     style=flet.ButtonStyle(
+                                         {"": colors.GREY_900,
+                                          "hovered": colors.LIME}
+                                     ))
+
+        header_options = Container(Row([
+            self.buttons_line,
+            self.menubutton,
+        ],
             vertical_alignment=flet.CrossAxisAlignment.CENTER,
-            width=185),
+            ),
             margin=flet.margin.only(25, 10, 10, 10)
         )
 
@@ -215,7 +303,7 @@ class ModalDialog(AlertDialog):
             scroll=flet.ScrollMode.AUTO,
         )
 
-        content = Container(
+        self.popup_content = Container(
             content=self.main_column,
             bgcolor="#f5f5f5",
             # height=550,
@@ -224,5 +312,6 @@ class ModalDialog(AlertDialog):
             margin=0,
         )
 
-        self.content = content
+        self.app.on_resize = self.on_resize
+        self.content = self.popup_content
         self.actions_alignment = MainAxisAlignment.END

@@ -27,6 +27,7 @@ def main(page: ft.Page):
         page.dialog = dialog.ModalDialog(page)
         page.dialog.open = True
         page.update()
+        page.dialog.on_resize(None)
 
     page.add(
         ft.ElevatedButton("Open dialog", on_click=open_dlg),
