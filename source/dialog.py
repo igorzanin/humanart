@@ -90,7 +90,7 @@ class ModalDialog(AlertDialog):
                 Tab(text='Arquivos', content=tab2),
                 Tab(text="Artbook", content=tab3),
             ],
-            height=400,
+            height=450,
         )
 
         return tabs
@@ -104,7 +104,6 @@ class ModalDialog(AlertDialog):
             self.menubutton.visible = False
             self.buttons_line.visible = True
             self.update()
-
 
     def close_dlg(self, e):
         if self.popup_view is True:
@@ -198,7 +197,7 @@ class ModalDialog(AlertDialog):
         ],
             vertical_alignment=flet.CrossAxisAlignment.CENTER,
             ),
-            margin=flet.margin.only(25, 10, 10, 10)
+            margin=flet.margin.only(35, 10, 10, 10),
         )
 
         style = flet.TextStyle(weight=flet.FontWeight.W_500)
@@ -212,7 +211,7 @@ class ModalDialog(AlertDialog):
                                    filled=True,
                                    expand=True,
                                    text_size=25,
-                                   text_style=style
+                                   text_style=style,
                                    )
 
         title_line = Row([
@@ -220,7 +219,7 @@ class ModalDialog(AlertDialog):
             header_options],
             vertical_alignment=flet.CrossAxisAlignment.CENTER,
             alignment=flet.MainAxisAlignment.SPACE_BETWEEN,
-            height=80
+            height=80,
         )
 
         header = Container(
@@ -307,7 +306,7 @@ class ModalDialog(AlertDialog):
             content=self.main_column,
             bgcolor="#f5f5f5",
             # height=550,
-            width=700,
+            width=750,
             padding=0,
             margin=0,
         )
