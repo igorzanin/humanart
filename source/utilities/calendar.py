@@ -57,7 +57,7 @@ class FletCalendar(ft.UserControl):
             width=280,
             # height=280,
             padding=ft.padding.all(5),
-            border=ft.border.all(0, self.border_color),
+            # border=ft.border.all(0, self.border_color),
             border_radius=ft.border_radius.all(5),
             alignment=ft.alignment.center,
         )
