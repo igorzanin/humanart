@@ -61,6 +61,7 @@ class ModalDialog(AlertDialog):
             selected_index=0,
             animation_duration=250,
             scrollable=True,
+            divider_color='white',
             tabs=[
                 Tab(text='Detalhes', content=tab1),
                 Tab(text='Arquivos', content=tab2),
