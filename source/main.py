@@ -26,11 +26,11 @@ def main(page: ft.Page):
             page.floating_action_button.visible = True
             page.update()
         else:
-            hide_mobile_menu(None)
             page.floating_action_button.visible = False
             page.update()
 
-    def open_dlg(e):
+    def open_mobile_menu(e):
+        page.app_menu.visible = False
         page.dialog = page.mobile_menu
         page.mobile_menu.visible = True
         page.floating_action_button.icon = ft.icons.CLOSE
@@ -40,10 +40,11 @@ def main(page: ft.Page):
     def hide_mobile_menu(e):
         page.mobile_menu.visible = False
         page.floating_action_button.icon = ft.icons.MENU
-        page.floating_action_button.on_click = open_dlg
+        page.floating_action_button.on_click = open_mobile_menu
         page.update()
 
     def open_app_menu(e):
+        hide_mobile_menu(None)
         page.dialog = page.app_menu
         if page.app_menu.visible is True:
             page.app_menu.visible = False
@@ -53,6 +54,11 @@ def main(page: ft.Page):
 
         page.update()
 
+    bc = ft.GestureDetector(
+        mouse_cursor=ft.MouseCursor.BASIC,
+        drag_interval=50,
+    )
+
     page.title = "Humanart"
     page.theme_mode = 'light'
     page.window_min_width = 300
@@ -61,46 +67,73 @@ def main(page: ft.Page):
     page.on_resize = on_resize
     page.calendar = FletCalendar(page)
     dialog = job_popup
-    page.add(page.calendar)
+    page.padding = 0
+    # page.bgcolor = 'blue'
+    # page.add(page.calendar)
     page.floating_action_button = ft.FloatingActionButton(
-        icon=ft.icons.MENU, bgcolor=ft.colors.LIME, on_click=open_dlg, visible=False
+        icon=ft.icons.MENU, bgcolor=ft.colors.LIME, on_click=open_mobile_menu, visible=False
     )
     white_menu_button_style = ft.ButtonStyle(color={ft.MaterialState.DEFAULT: ft.colors.WHITE},
                                              shape={ft.MaterialState.DEFAULT: ft.RoundedRectangleBorder(radius=100)})
 
-    page.appbar = ft.AppBar(
-        leading_width=100,
-        title=ft.Container(ft.Text("HUMANART",
-                                   color='white',
-                                   weight=ft.FontWeight.BOLD,
-                                   ),
-                           alignment=flet.alignment.center_left,
-                           expand=False,
-                           width=150,
-                           height=75,
-                           ),
-        center_title=False,
-        bgcolor=ft.colors.LIGHT_BLUE,
-        actions=[
-            ft.Container(ft.Row(
-                [
-                    ft.IconButton(ft.icons.NOTIFICATIONS, style=white_menu_button_style),
-                    ft.IconButton(ft.icons.MORE_VERT, style=white_menu_button_style, on_click=open_app_menu),
+    column = ft.Column([
+        page.calendar,
+        ft.ElevatedButton("Open dialog", on_click=open_mobile_menu),
+        ft.ElevatedButton("Open modal dialog", on_click=open_dlg_modal),
+    ])
+
+    page.appbar = ft.Container(width=float("inf"),
+                               margin=0,
+                               padding=0,
+                               height=75,
+                               gradient=ft.LinearGradient(
+                begin=ft.alignment.top_left,
+                end=ft.Alignment(0.8, 1),
+                colors=[
+                    '#0072ff',
+                    '#00c6ff',
                 ],
-                spacing=3,
-            ),
-                padding=10,
-            )
-        ],
     )
-    page.appbar.toolbar_height = 75
+    )
+
+    content = ft.Container(column, expand=True, padding=10)
+    page.add(content)
+
+    # page.appbar = ft.AppBar(
+    #     color=ft.colors.PURPLE,
+    #     leading_width=100,
+    #     title=ft.Container(
+    #         ft.Text("HUMANART",
+    #                 color='white',
+    #                 weight=ft.FontWeight.BOLD,
+    #                 ),
+    #         alignment=flet.alignment.center_left,
+    #         expand=False,
+    #         width=150,
+    #         height=75,
+    #     ),
+    #     center_title=False,
+    #     bgcolor=ft.colors.LIGHT_BLUE,
+    #     actions=[
+    #         ft.Container(ft.Row(
+    #             [
+    #                 ft.IconButton(ft.icons.NOTIFICATIONS, style=white_menu_button_style),
+    #                 ft.IconButton(ft.icons.MORE_VERT, style=white_menu_button_style, on_click=open_app_menu),
+    #             ],
+    #             spacing=3,
+    #         ),
+    #             padding=10,
+    #         )
+    #     ],
+    # )
+    # page.appbar.toolbar_height = 75
 
     page.mobile_menu = ft.Stack(
         [
             ft.Row(
                 [
                     ft.Container(width=220, height=float("inf"), bgcolor='#fafafa'),
-                    ft.Container(bgcolor='black', expand=True, on_click=hide_mobile_menu, opacity=0.45)
+                    ft.Container(bc, bgcolor='black', expand=True, on_click=hide_mobile_menu, opacity=0.45)
                 ],
                 spacing=0,
             ),
@@ -129,6 +162,7 @@ def main(page: ft.Page):
     page.app_menu = ft.Stack(
         [
             ft.Container(
+                bc,
                 on_click=open_app_menu,
                 opacity=0.45,
             ),
@@ -137,13 +171,14 @@ def main(page: ft.Page):
         visible=False
     )
 
-    page.add(
-        ft.ElevatedButton("Open dialog", on_click=open_dlg),
-        ft.ElevatedButton("Open modal dialog", on_click=open_dlg_modal),
-    )
+    # page.add(
+    #     ft.ElevatedButton("Open dialog", on_click=open_mobile_menu),
+    #     ft.ElevatedButton("Open modal dialog", on_click=open_dlg_modal),
+    # )
 
     page.on_keyboard_event = on_keyboard
     on_resize(None)
 
 
 ft.app(target=main)
+
