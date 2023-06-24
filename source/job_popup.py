@@ -95,7 +95,7 @@ class ModalDialog(AlertDialog):
 
         return tabs
 
-    def on_resize(self, e):
+    def on_resize(self, e=None):
         if self.page.width < 576.0:
             self.menubutton.visible = True
             self.buttons_line.visible = False
@@ -311,6 +311,6 @@ class ModalDialog(AlertDialog):
             margin=0,
         )
 
-        self.app.on_resize = self.on_resize
+        # self.app.on_resize = self.on_resize
         self.content = self.popup_content
         self.actions_alignment = MainAxisAlignment.END
