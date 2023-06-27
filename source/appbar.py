@@ -7,13 +7,13 @@ class AppBar(ft.UserControl):
         self.app_layout = app_layout
         self.page = page
         self.page.on_resize = self.on_resize
-        self.hide_menu_button = ft.IconButton(ft.icons.MENU_OPEN, icon_color='white', on_click=self.toggle_side_menu)
+        self.hide_menu_button = ft.IconButton(ft.icons.MENU_OPEN, icon_color=ft.colors.WHITE, on_click=self.toggle_side_menu)
         appbar_content = ft.Row([
             self.hide_menu_button,
             ft.Text("HUMANART",
                     font_family="FiraSansBold",
                     size=25,
-                    color='white')
+                    color=ft.colors.WHITE)
         ],
             vertical_alignment=ft.CrossAxisAlignment.CENTER
         )
@@ -28,8 +28,12 @@ class AppBar(ft.UserControl):
                 begin=ft.alignment.top_left,
                 end=ft.Alignment(0.8, 1),
                 colors=[
-                    '#0072ff',
-                    '#00c6ff',
+                    # '#0072ff',
+                    # '#00c6ff',
+                    ft.colors.SECONDARY_CONTAINER,
+                    ft.colors.PRIMARY,
+                    ft.colors.ON_SURFACE,
+                    ft.colors.ON_SECONDARY_CONTAINER,
                 ],
             )
         )

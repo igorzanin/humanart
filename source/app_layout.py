@@ -10,6 +10,7 @@ class AppLayout(ft.Column):
         super().__init__(*args, **kwargs)
         self.app = app
         self.page = page
+        self.auto_scroll = True
         self.side_menu = SideMenu(self, page)
         self.spacing = 0
         self.calendar = FletCalendar(page)
@@ -18,9 +19,11 @@ class AppLayout(ft.Column):
             self.calendar,
             ft.ElevatedButton("Open dialog",
                               # on_click=open_mobile_menu
+                              style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=5))
                               ),
             ft.ElevatedButton("Open modal dialog",
-                              on_click=self.open_job_popup
+                              on_click=self.open_job_popup,
+                              style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=5))
                               ),
             ft.ElevatedButton("Dark/Light mode",
                               on_click=self.toggle_theme,
@@ -45,5 +48,5 @@ class AppLayout(ft.Column):
         self.page.dialog = job_popup_dialog
         self.page.add(job_popup_dialog)
         job_popup_dialog.open = True
-        self.page.update()
         job_popup_dialog.on_resize(None)
+        self.page.update()

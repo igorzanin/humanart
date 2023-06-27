@@ -251,6 +251,7 @@ def main(page: ft.Page):
     app = HumanartApp(page)
     page.theme = AppTheme()
     page.dark_theme = DarkTheme()
+    page.auto_scroll = True
     page.add(app)
     page.update()
     app.initialize()
