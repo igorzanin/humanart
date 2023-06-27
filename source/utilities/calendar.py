@@ -124,8 +124,8 @@ class FletCalendar(ft.UserControl):
         # return cal.monthdayscalendar(self.current_year, self.current_month)
 
     def set_theme(self,
-                  border_color=ft.colors.GREY_400,
-                  text_color=ft.colors.GREY_900,
+                  border_color=ft.colors.SURFACE_VARIANT,
+                  text_color=ft.colors.ON_SURFACE_VARIANT,
                   current_day_color=ft.colors.LIME,
                   ):
 
@@ -148,12 +148,12 @@ class FletCalendar(ft.UserControl):
                           icon_size=18,
                           aspect_ratio=1,
                           style=ft.ButtonStyle(
-                              {"": ft.colors.GREY_400,
-                               "hovered": ft.colors.BLUE_ACCENT}
+                              {"": ft.colors.OUTLINE,
+                               "hovered": ft.colors.PRIMARY}
                           )),
         )
 
-        div = ft.Divider(height=10, thickness=0.75, color="#dbdbdb")
+        div = ft.Divider(height=10, thickness=0.75, color=ft.colors.ON_SURFACE_VARIANT)
 
         prev_button = ft.Container(
             ft.IconButton(ft.icons.ARROW_BACK_IOS_NEW_ROUNDED,
@@ -161,8 +161,8 @@ class FletCalendar(ft.UserControl):
                           icon_size=18,
                           aspect_ratio=1,
                           style=ft.ButtonStyle(
-                              {"": ft.colors.GREY_400,
-                               "hovered": ft.colors.BLUE_ACCENT}
+                              {"": ft.colors.OUTLINE,
+                               "hovered": ft.colors.PRIMARY}
                           )),
         )
 
@@ -183,10 +183,10 @@ class FletCalendar(ft.UserControl):
             # Loop days and add days to row.
             for day in week:
                 if day > 0:
-                    overlay_color = ft.colors.LIGHT_BLUE_50
+                    overlay_color = ft.colors.PRIMARY_CONTAINER
                     is_current_day_font = ft.FontWeight.W_300
-                    is_current_day_bg = ft.colors.WHITE
-                    is_current_day_color = ft.colors.BLACK
+                    is_current_day_bg = ft.colors.TRANSPARENT
+                    is_current_day_color = ft.colors.ON_BACKGROUND
                     button_radius = 2
                     display_day = str(day)
                     if len(str(display_day)) == 1: display_day = '0%s' % display_day
@@ -194,13 +194,13 @@ class FletCalendar(ft.UserControl):
                     date = datetime.datetime(self.current_year, self.current_month, day)
                     weekday = date.weekday()
                     if weekday == 5 or weekday == 6:
-                        is_current_day_bg = "#f5f5f5"
+                        is_current_day_bg = ft.colors.SURFACE_VARIANT
 
                     if day == self.current_day:
                         overlay_color = None
                         is_current_day_font = ft.FontWeight.BOLD
                         is_current_day_bg = self.current_day_color
-                        is_current_day_color = ft.colors.WHITE
+                        is_current_day_color = ft.colors.BACKGROUND
                         button_radius = 100
 
                     date_button = ft.TextButton(text=display_day,
@@ -231,7 +231,7 @@ class FletCalendar(ft.UserControl):
                                               border_radius=ft.border_radius.all(0),
                                               padding=0,
                                               margin=0,
-                                              bgcolor="#fafafa"
+                                              bgcolor=ft.colors.TRANSPARENT
                                               )
 
                 else:

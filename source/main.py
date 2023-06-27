@@ -6,6 +6,7 @@ from sidemenu import SideMenu
 from job_popup import JobPopup
 from appbar import AppBar
 from assets.theme import AppTheme
+from assets.dark_theme import DarkTheme
 
 BC = ft.GestureDetector(
     mouse_cursor=ft.MouseCursor.BASIC,
@@ -86,8 +87,8 @@ def main(page: ft.Page):
 
     page.title = "Humanart"
     page.theme_mode = 'light'
-    page.theme = ft.Theme(color_scheme=AppTheme(True))
-    page.dark_theme = ft.Theme(color_scheme=AppTheme(False))
+    page.theme = AppTheme()
+    page.dark_theme = DarkTheme()
     page.update()
 
     page.spacing = 0
@@ -114,7 +115,12 @@ def main(page: ft.Page):
         page.calendar,
         ft.ElevatedButton("Open dialog", on_click=open_mobile_menu),
         ft.ElevatedButton("Open modal dialog", on_click=open_job_popup),
-        ft.ElevatedButton("Dark/Light mode", on_click=toggle_theme),
+        ft.ElevatedButton("Dark/Light mode",
+                          on_click=toggle_theme,
+                          bgcolor=page.theme.custom_colors["sucess"],
+                          color=ft.colors.ON_PRIMARY,
+                          style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=5)),
+                          )
     ])
 
     page.appbar = AppBar(page)

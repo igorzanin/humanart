@@ -205,7 +205,7 @@ class JobPopup(AlertDialog):
         job_name_input = TextField(value="Nome do trabalho",
                                    height=55,
                                    border_color='transparent',
-                                   # bgcolor='white',
+                                   bgcolor=colors.BACKGROUND,
                                    focused_border_width=1.5,
                                    content_padding=flet.padding.only(15, 10, 15, 10),
                                    filled=True,
@@ -225,7 +225,7 @@ class JobPopup(AlertDialog):
         header = Container(
             content=title_line,
             padding=flet.padding.only(25, 15, 15, 25),
-            # bgcolor=colors.WHITE,
+            bgcolor=colors.BACKGROUND,
         )
 
         def update_description_text(e):
@@ -248,7 +248,7 @@ class JobPopup(AlertDialog):
                                          extension_set=flet.MarkdownExtensionSet.GITHUB_FLAVORED)
 
         def hover_txt_container(e):
-            e.control.bgcolor = "#f5f5f5" if e.data == "true" else None
+            e.control.bgcolor = colors.SURFACE_VARIANT if e.data == "true" else None
             e.control.update()
 
         self.description_container = Container(self.description_text,
@@ -266,7 +266,6 @@ class JobPopup(AlertDialog):
                                            on_blur=update_description_text)
 
         self.side_container = Container(Row(controls=[Text("oi")]),
-                                        # bgcolor='#f5f5f5',
                                         height=300
                                         )
         self.side_column = Column(
@@ -281,7 +280,7 @@ class JobPopup(AlertDialog):
                                  # margin=0,
                                  padding=flet.padding.only(20, 0, 20, 0),
                                  col={"xs": 3, "sm": 2},
-                                 # bgcolor=colors.WHITE
+                                 bgcolor=colors.BACKGROUND
                                  )
 
         self.main_row = ResponsiveRow([tabs_content, self.side_column],
@@ -304,13 +303,14 @@ class JobPopup(AlertDialog):
 
         self.popup_content = Container(
             content=self.main_column,
-            # bgcolor="#f5f5f5",
+            bgcolor=colors.SURFACE_VARIANT,
             # height=550,
             width=750,
             padding=0,
             margin=0,
         )
 
-        # self.app.on_resize = self.on_resize
+        self.app.on_resize = self.on_resize
         self.content = self.popup_content
         self.actions_alignment = MainAxisAlignment.END
+
