@@ -16,7 +16,7 @@ class SideMenu(ft.UserControl):
                 label_content=ft.Text("Boards"),
                 label="Boards",
                 icon=ft.icons.BOOK_OUTLINED,
-                selected_icon=ft.icons.BOOK_OUTLINED
+                selected_icon=ft.icons.BOOK_OUTLINED,
             ),
             ft.NavigationRailDestination(
                 label_content=ft.Text("Members"),

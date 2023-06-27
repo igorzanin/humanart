@@ -23,9 +23,10 @@ txt_content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed http
 class CalendarPopup(AlertDialog):
 
     def close_dlg(self, e):
+        self.page.dialog = self.mother
         self.mother.open = True
-        self.mother.update()
         self.open = False
+        self.page.update()
 
     def __init__(self, app, mother_popup: AlertDialog):
         super(CalendarPopup, self).__init__()
@@ -40,7 +41,7 @@ class CalendarPopup(AlertDialog):
         self.content_padding = 0.0
         self.actions_padding = 0.0
         self.mother = mother_popup
-        # self.on_dismiss = self.close_dlg    #if you want to close current popup uncomment this lines
+        self.on_dismiss = self.close_dlg    #if you want to close current popup uncomment this lines
 
 
 class JobPopup(AlertDialog):
@@ -177,13 +178,14 @@ class JobPopup(AlertDialog):
             #
             # popup alternative ======================================
 
-            # TODO: Need to fix it
-            popup_calendar = CalendarPopup(app_layout, self)
+            self.open = False       #if you want to close current popup uncomment this lines
+            popup_calendar = CalendarPopup(page, self)
+            self.page.dialog = popup_calendar
             self.page.add(popup_calendar)
+            self.page.update()
             popup_calendar.open = True
             self.page.update()
-            # self.open = False       #if you want to close current popup uncomment this lines
-            # self.update()
+            # TODO: Need to fix it
 
         self.menubutton = IconButton(icons.MORE_VERT,
                                      visible=False,
