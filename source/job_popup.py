@@ -34,7 +34,7 @@ class CalendarPopup(AlertDialog):
             calendar.output,
             calendar,
         ])
-        self.content = Container(calendar, bgcolor='white', expand=False, height=300, border_radius=10)
+        self.content = Container(calendar, expand=False, height=300, border_radius=10)
         self.shape = CountinuosRectangleBorder()
         self.shape.radius = 10.0
         self.content_padding = 0.0
@@ -43,7 +43,7 @@ class CalendarPopup(AlertDialog):
         # self.on_dismiss = self.close_dlg    #if you want to close current popup uncomment this lines
 
 
-class ModalDialog(AlertDialog):
+class JobPopup(AlertDialog):
 
     def tab_content_build(self):
 
@@ -117,8 +117,9 @@ class ModalDialog(AlertDialog):
 
     def __init__(self, app):
 
-        super(ModalDialog, self).__init__()
+        super(JobPopup, self).__init__()
         self.modal = False
+        self.theme = flet.Theme(app.theme)
         self.shape = CountinuosRectangleBorder()
         self.shape.radius = 3.0
         self.content_padding = 0.0
@@ -128,7 +129,6 @@ class ModalDialog(AlertDialog):
         self.popup_view = False
         self.on_dismiss = self.close_dlg
         self.popup_calendar = Container(self.calendar,
-                                        bgcolor='white',
                                         expand=False,
                                         height=300,
                                         padding=flet.padding.only(20, 20, 20, 25)
@@ -205,7 +205,7 @@ class ModalDialog(AlertDialog):
         job_name_input = TextField(value="Nome do trabalho",
                                    height=55,
                                    border_color='transparent',
-                                   bgcolor='white',
+                                   # bgcolor='white',
                                    focused_border_width=1.5,
                                    content_padding=flet.padding.only(15, 10, 15, 10),
                                    filled=True,
@@ -225,7 +225,7 @@ class ModalDialog(AlertDialog):
         header = Container(
             content=title_line,
             padding=flet.padding.only(25, 15, 15, 25),
-            bgcolor=colors.WHITE,
+            # bgcolor=colors.WHITE,
         )
 
         def update_description_text(e):
@@ -234,7 +234,7 @@ class ModalDialog(AlertDialog):
                 self.description_text.value = self.description_input.value
                 self.description_input.visible = False
                 self.description_container.visible = True
-                self.description_container.bgcolor = 'white'
+                # self.description_container.bgcolor = 'white'
 
             else:
                 self.description_input.visible = True
@@ -266,7 +266,7 @@ class ModalDialog(AlertDialog):
                                            on_blur=update_description_text)
 
         self.side_container = Container(Row(controls=[Text("oi")]),
-                                        bgcolor='#f5f5f5',
+                                        # bgcolor='#f5f5f5',
                                         height=300
                                         )
         self.side_column = Column(
@@ -281,7 +281,7 @@ class ModalDialog(AlertDialog):
                                  # margin=0,
                                  padding=flet.padding.only(20, 0, 20, 0),
                                  col={"xs": 3, "sm": 2},
-                                 bgcolor=colors.WHITE
+                                 # bgcolor=colors.WHITE
                                  )
 
         self.main_row = ResponsiveRow([tabs_content, self.side_column],
@@ -304,7 +304,7 @@ class ModalDialog(AlertDialog):
 
         self.popup_content = Container(
             content=self.main_column,
-            bgcolor="#f5f5f5",
+            # bgcolor="#f5f5f5",
             # height=550,
             width=750,
             padding=0,
