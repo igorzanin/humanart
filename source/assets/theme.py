@@ -10,10 +10,10 @@ class AppTheme(ft.Theme):
             on_primary="#ffffff",
             primary_container="#c9e6ff",
             on_primary_container="#001e2f",
-            secondary="#006b5d",
+            secondary="#006a62",
             on_secondary="#ffffff",
-            secondary_container="#77f8e0",
-            on_secondary_container="#00201b",
+            secondary_container="#72f8e8",
+            on_secondary_container="#00201d",
             tertiary="#b90064",
             on_tertiary="#ffffff",
             tertiary_container="#ffd9e2",
@@ -30,6 +30,7 @@ class AppTheme(ft.Theme):
             surface_variant="#f5f5f5",
             on_surface_variant="#41474d"
         )
+
         self.custom_colors = {
             "sucess": ft.colors.LIME
         }

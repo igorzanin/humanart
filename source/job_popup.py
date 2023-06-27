@@ -115,17 +115,18 @@ class JobPopup(AlertDialog):
             self.open = False
             self.app.update()
 
-    def __init__(self, app):
+    def __init__(self, app_layout, page):
 
         super(JobPopup, self).__init__()
+        self.app_layout = app_layout
         self.modal = False
-        self.theme = flet.Theme(app.theme)
+        self.theme = flet.Theme(page.theme)
         self.shape = CountinuosRectangleBorder()
         self.shape.radius = 3.0
         self.content_padding = 0.0
         self.actions_padding = 0.0
-        self.app = app
-        self.calendar = FletCalendar(app)
+        self.app = page
+        self.calendar = FletCalendar(page)
         self.popup_view = False
         self.on_dismiss = self.close_dlg
         self.popup_calendar = Container(self.calendar,
@@ -175,10 +176,12 @@ class JobPopup(AlertDialog):
             # bottom_sheet.update()
             #
             # popup alternative ======================================
-            popup_calendar = CalendarPopup(app, self)
+
+            # TODO: Need to fix it
+            popup_calendar = CalendarPopup(app_layout, self)
             self.page.add(popup_calendar)
             popup_calendar.open = True
-            popup_calendar.update()
+            self.page.update()
             # self.open = False       #if you want to close current popup uncomment this lines
             # self.update()
 
@@ -196,7 +199,7 @@ class JobPopup(AlertDialog):
             self.menubutton,
         ],
             vertical_alignment=flet.CrossAxisAlignment.CENTER,
-            ),
+        ),
             margin=flet.margin.only(35, 10, 10, 10),
         )
 
@@ -313,4 +316,3 @@ class JobPopup(AlertDialog):
         self.app.on_resize = self.on_resize
         self.content = self.popup_content
         self.actions_alignment = MainAxisAlignment.END
-

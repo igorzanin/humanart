@@ -2,9 +2,9 @@ import flet as ft
 
 
 class AppBar(ft.UserControl):
-    def __init__(self, page, *args, **kwargs):
+    def __init__(self,app_layout, page, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
+        self.app_layout = app_layout
         self.page = page
         self.page.on_resize = self.on_resize
         self.hide_menu_button = ft.IconButton(ft.icons.MENU_OPEN, icon_color='white', on_click=self.toggle_side_menu)
@@ -12,7 +12,6 @@ class AppBar(ft.UserControl):
             self.hide_menu_button,
             ft.Text("HUMANART",
                     font_family="FiraSansBold",
-                    # weight=ft.FontWeight.BOLD,
                     size=25,
                     color='white')
         ],
@@ -46,15 +45,13 @@ class AppBar(ft.UserControl):
         self.update()
 
     def toggle_side_menu(self, e=None):
-        if self.page.side_menu_container.visible is True:
+        if self.app_layout.side_menu.visible is True:
             self.hide_menu_button.icon = ft.icons.MENU
-            self.page.side_menu_container.visible = False
-            self.page.side_menu_is_opened = False
+            self.app_layout.side_menu.visible = False
 
         else:
             self.hide_menu_button.icon = ft.icons.MENU_OPEN
-            self.page.side_menu_container.visible = True
-            self.page.side_menu_is_opened = True
+            self.app_layout.side_menu.visible = True
 
         self.update()
         self.page.update()
