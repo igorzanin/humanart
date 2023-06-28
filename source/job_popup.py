@@ -23,9 +23,8 @@ txt_content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed http
 class CalendarPopup(AlertDialog):
 
     def close_dlg(self, e):
-        self.page.dialog = self.mother
-        self.mother.open = True
         self.open = False
+        self.page.overlay.remove(self)
         self.page.update()
 
     def __init__(self, app, mother_popup: AlertDialog):
@@ -136,6 +135,28 @@ class JobPopup(AlertDialog):
                                         padding=flet.padding.only(20, 20, 20, 25)
                                         )
 
+        def open_calendar(e):
+            # self.popup_view = True
+            # self.content = self.popup_calendar
+            # self.update()
+
+            # bottom sheet alternative ===============================
+            # bottom_sheet = flet.BottomSheet(content=self.calendar)
+            # self.page.add(bottom_sheet)
+            # bottom_sheet.open = True
+            # bottom_sheet.update()
+            #
+            # popup alternative ======================================
+
+            # self.open = False       #if you want to close current popup uncomment this lines
+            popup_calendar = CalendarPopup(page, self)
+            self.page.overlay.append(popup_calendar)
+            # self.page.add(popup_calendar)
+            # self.page.update()
+            popup_calendar.open = True
+            self.page.update()
+            # TODO: Need to fix it
+
         button_delete = IconButton(icons.DELETE, icon_size=20,
                                    col={"xs": 0, "sm": 1},
                                    style=flet.ButtonStyle(
@@ -150,6 +171,7 @@ class JobPopup(AlertDialog):
                                  ))
         button_attach = IconButton(icons.ATTACH_FILE, icon_size=20,
                                    col=1,
+                                   on_click=open_calendar,
                                    style=flet.ButtonStyle(
                                        {"": colors.GREY_400,
                                         "hovered": colors.LIGHT_BLUE_400}
@@ -164,28 +186,6 @@ class JobPopup(AlertDialog):
             spacing=0,
             alignment=flet.MainAxisAlignment.END,
         )
-
-        def open_calendar(e):
-            # self.popup_view = True
-            # self.content = self.popup_calendar
-            # self.update()
-
-            # bottom sheet alternative ===============================
-            # bottom_sheet = flet.BottomSheet(content=self.calendar)
-            # self.page.add(bottom_sheet)
-            # bottom_sheet.open = True
-            # bottom_sheet.update()
-            #
-            # popup alternative ======================================
-
-            self.open = False       #if you want to close current popup uncomment this lines
-            popup_calendar = CalendarPopup(page, self)
-            self.page.dialog = popup_calendar
-            self.page.add(popup_calendar)
-            self.page.update()
-            popup_calendar.open = True
-            self.page.update()
-            # TODO: Need to fix it
 
         self.menubutton = IconButton(icons.MORE_VERT,
                                      visible=False,

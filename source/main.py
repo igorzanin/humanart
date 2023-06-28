@@ -24,6 +24,7 @@ class HumanartApp(ft.UserControl):
         self.page.spacing = 0
         self.page.window_min_width = 300
         self.page.auto_scroll = True
+
         self.page.fonts = {
             "FiraSans": "source/assets/FiraSans-Regular.ttf",
             "FiraSansBold": "source/assets/FiraSans-Bold.ttf",
@@ -32,8 +33,8 @@ class HumanartApp(ft.UserControl):
         }
 
     def build(self):
-        self.layout = [AppLayout(self, self.page, expand=True)]
-
+        self.app_layout = AppLayout(self, self.page, expand=True)
+        self.layout = [self.app_layout]
 
         return self.layout
 
@@ -257,4 +258,4 @@ def main(page: ft.Page):
     app.initialize()
 
 
-ft.app(target=main, assets_dir="assets", view=ft.WEB_BROWSER)
+ft.app(target=main, assets_dir="assets", view=ft.FLET_APP)

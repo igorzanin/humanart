@@ -34,3 +34,9 @@ class AppTheme(ft.Theme):
         self.custom_colors = {
             "sucess": ft.colors.LIME
         }
+
+        self.appbar_gradient = [
+            '#0072ff',
+            '#00c6ff',
+        ]
+

@@ -10,6 +10,8 @@ class SideMenu(ft.UserControl):
         self.theme = page.theme
         self.visible = True
         self.nav_rail_visible = True
+        self.page.on_resize = self.on_resize
+
 
         self.top_nav_items = [
             ft.NavigationRailDestination(
@@ -81,6 +83,7 @@ class SideMenu(ft.UserControl):
             bgcolor=ft.colors.SURFACE_VARIANT,
             visible=self.nav_rail_visible,
         )
+
         return self.view
 
     def toggle_nav_rail(self, e):
@@ -112,3 +115,9 @@ class SideMenu(ft.UserControl):
         self.view.update()
         self.page.update()
 
+    def on_resize(self, e=None):
+        if self.page.window_width < 768:
+            self.view.visible = False
+        else:
+            self.view.visible = self.nav_rail_visible
+        self.view.update()

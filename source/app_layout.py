@@ -33,8 +33,9 @@ class AppLayout(ft.Column):
                               )
         ])
 
+        self.appbar = AppBar(self, page)
         main_row = ft.Row([self.side_menu, content_area], expand=True)
-        self.controls = [AppBar(self, page), main_row]
+        self.controls = [self.appbar, main_row]
 
     def toggle_theme(self, e=None):
         if self.page.theme_mode == 'dark':

@@ -33,3 +33,8 @@ class DarkTheme(ft.Theme):
         self.custom_colors = {
             "sucess": "b7f55a"
         }
+
+        self.appbar_gradient = [
+            '#001e2f',
+            '#001f25',
+        ]
