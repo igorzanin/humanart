@@ -12,7 +12,6 @@ class SideMenu(ft.UserControl):
         self.nav_rail_visible = True
         self.page.on_resize = self.on_resize
 
-
         self.top_nav_items = [
             ft.NavigationRailDestination(
                 label_content=ft.Text("Boards"),
@@ -33,17 +32,42 @@ class SideMenu(ft.UserControl):
             label_type="all",
             on_change=self.top_nav_change,
             destinations=self.top_nav_items,
-            bgcolor=ft.colors.SURFACE_VARIANT,
+            # bgcolor=ft.colors.SURFACE_VARIANT,
+            bgcolor=ft.colors.BACKGROUND,
             extended=True,
             height=110
         )
+
+        self.workspace_options = ft.Column(
+                    [
+                        # divider
+                        ft.Container(
+                            bgcolor=ft.colors.BLACK26,
+                            border_radius=ft.border_radius.all(30),
+                            height=1,
+                            alignment=ft.alignment.center_right,
+                            width=200
+                        ),
+                        self.top_nav_rail,
+
+                        # divider
+                        ft.Container(
+                            bgcolor=ft.colors.BLACK26,
+                            border_radius=ft.border_radius.all(30),
+                            height=1,
+                            alignment=ft.alignment.center_right,
+                            width=200
+                        ),
+                    ])
+
         self.bottom_nav_rail = ft.NavigationRail(
             selected_index=None,
             label_type="all",
             on_change=self.bottom_nav_change,
             extended=True,
             expand=True,
-            bgcolor=ft.colors.SURFACE_VARIANT,
+            # bgcolor=ft.colors.SURFACE_VARIANT,
+            bgcolor=ft.colors.BACKGROUND,
         )
         self.toggle_nav_rail_button = ft.IconButton(ft.icons.ARROW_BACK)
         self.page.on_route_change = self.set_styles
@@ -55,32 +79,18 @@ class SideMenu(ft.UserControl):
         self.view = ft.Container(
             content=ft.Column([
                 ft.Row([
-                    ft.Text("Workspace"),
+                    ft.ElevatedButton("Workspace", icon=ft.icons.ARROW_RIGHT, style=ft.ButtonStyle(shape={"": ft.RoundedRectangleBorder(radius=0)})),
                 ], alignment="spaceBetween"),
-                # divider
-                ft.Container(
-                    bgcolor=ft.colors.BLACK26,
-                    border_radius=ft.border_radius.all(30),
-                    height=1,
-                    alignment=ft.alignment.center_right,
-                    width=220
-                ),
-                self.top_nav_rail,
-                # divider
-                ft.Container(
-                    bgcolor=ft.colors.BLACK26,
-                    border_radius=ft.border_radius.all(30),
-                    height=1,
-                    alignment=ft.alignment.center_right,
-                    width=220
-                ),
+                self.workspace_options,
                 self.bottom_nav_rail
-            ], tight=True),
+            ],
+                tight=True),
             padding=ft.padding.all(15),
             margin=ft.margin.all(0),
-            width=250,
-            expand=True,
-            bgcolor=ft.colors.SURFACE_VARIANT,
+            width=220,
+            # expand=True,
+            # bgcolor=ft.colors.SURFACE_VARIANT,
+            bgcolor=ft.colors.BACKGROUND,
             visible=self.nav_rail_visible,
         )
 
@@ -121,3 +131,5 @@ class SideMenu(ft.UserControl):
         else:
             self.view.visible = self.nav_rail_visible
         self.view.update()
+
+    # def toggle_menus(self, ):

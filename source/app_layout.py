@@ -51,3 +51,4 @@ class AppLayout(ft.Column):
         job_popup_dialog.open = True
         job_popup_dialog.on_resize(None)
         self.page.update()
+

@@ -24,6 +24,11 @@ class HumanartApp(ft.UserControl):
         self.page.spacing = 0
         self.page.window_min_width = 300
         self.page.auto_scroll = True
+        self.page.on_resize = self.page_resize
+
+        self.floating_action_button = ft.FloatingActionButton(
+            icon=ft.icons.MENU, bgcolor=ft.colors.PRIMARY_CONTAINER, on_click=self.open_mobile_menu, visible=False,
+        )
 
         self.page.fonts = {
             "FiraSans": "source/assets/FiraSans-Regular.ttf",
@@ -32,9 +37,12 @@ class HumanartApp(ft.UserControl):
             "RobotoSlab": "https://github.com/google/fonts/raw/main/apache/robotoslab/RobotoSlab%5Bwght%5D.ttf"
         }
 
+    def open_mobile_menu(self, e=None):
+        pass
+
     def build(self):
         self.app_layout = AppLayout(self, self.page, expand=True)
-        self.layout = [self.app_layout]
+        self.layout = [self.app_layout, self.floating_action_button]
 
         return self.layout
 
@@ -50,6 +58,13 @@ class HumanartApp(ft.UserControl):
         )
 
         self.page.update()
+
+    def page_resize(self, e=None):
+        if self.page.window_width < 768:
+            self.floating_action_button.visible = True
+        else:
+            self.floating_action_button.visible = False
+        self.floating_action_button.update()
 
 
 def main(page: ft.Page):
@@ -258,4 +273,4 @@ def main(page: ft.Page):
     app.initialize()
 
 
-ft.app(target=main, assets_dir="assets", view=ft.FLET_APP)
+ft.app(target=main, assets_dir="assets", view=ft.WEB_BROWSER)
