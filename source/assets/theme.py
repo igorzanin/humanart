@@ -14,6 +14,7 @@ class AppTheme(ft.Theme):
             on_secondary="#ffffff",
             secondary_container="#72f8e8",
             on_secondary_container="#00201d",
+            # on_secondary_container="#808080",
             tertiary="#b90064",
             on_tertiary="#ffffff",
             tertiary_container="#ffd9e2",

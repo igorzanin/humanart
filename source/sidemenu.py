@@ -14,11 +14,18 @@ class SideMenu(ft.UserControl):
 
         self.top_nav_items = [
             ft.NavigationRailDestination(
-                label_content=ft.Text("Boards"),
+                label_content=ft.Text("Trabalhos"),
                 label="Boards",
-                icon=ft.icons.BOOK_OUTLINED,
-                selected_icon=ft.icons.BOOK_OUTLINED,
+                icon=ft.icons.CONTENT_PASTE_OUTLINED,
+                selected_icon=ft.icons.CONTENT_PASTE,
             ),
+
+            # ft.NavigationRailDestination(
+            #     icon_content=ft.Icon(ft.icons.HOME_OUTLINED, color="#F8B644", size=30),
+            #     selected_icon_content=ft.Icon(ft.icons.HOME, color="#F8B644", size=30),
+            #     label_content=ft.Text("Menu", color="#F8B644")
+            # ),
+
             ft.NavigationRailDestination(
                 label_content=ft.Text("Members"),
                 label="Members",
@@ -33,7 +40,7 @@ class SideMenu(ft.UserControl):
             on_change=self.top_nav_change,
             destinations=self.top_nav_items,
             # bgcolor=ft.colors.SURFACE_VARIANT,
-            bgcolor=ft.colors.BACKGROUND,
+            bgcolor="transparent",
             extended=True,
             height=110
         )
@@ -42,7 +49,7 @@ class SideMenu(ft.UserControl):
                     [
                         # divider
                         ft.Container(
-                            bgcolor=ft.colors.BLACK26,
+                            bgcolor=ft.colors.ON_SECONDARY_CONTAINER,
                             border_radius=ft.border_radius.all(30),
                             height=1,
                             alignment=ft.alignment.center_right,
@@ -52,7 +59,7 @@ class SideMenu(ft.UserControl):
 
                         # divider
                         ft.Container(
-                            bgcolor=ft.colors.BLACK26,
+                            bgcolor=ft.colors.ON_SECONDARY_CONTAINER,
                             border_radius=ft.border_radius.all(30),
                             height=1,
                             alignment=ft.alignment.center_right,
@@ -65,9 +72,10 @@ class SideMenu(ft.UserControl):
             label_type="all",
             on_change=self.bottom_nav_change,
             extended=True,
-            expand=True,
+            height=110,
+            # expand=False,
             # bgcolor=ft.colors.SURFACE_VARIANT,
-            bgcolor=ft.colors.BACKGROUND,
+            bgcolor="transparent",
         )
         self.toggle_nav_rail_button = ft.IconButton(ft.icons.ARROW_BACK)
         self.page.on_route_change = self.set_styles
@@ -79,18 +87,20 @@ class SideMenu(ft.UserControl):
         self.view = ft.Container(
             content=ft.Column([
                 ft.Row([
-                    ft.ElevatedButton("Workspace", icon=ft.icons.ARROW_RIGHT, style=ft.ButtonStyle(shape={"": ft.RoundedRectangleBorder(radius=0)})),
+                    ft.Text("Workspace"),
                 ], alignment="spaceBetween"),
                 self.workspace_options,
                 self.bottom_nav_rail
             ],
-                tight=True),
+                # tight=True,
+                scroll=ft.ScrollMode.ALWAYS,
+            ),
             padding=ft.padding.all(15),
             margin=ft.margin.all(0),
             width=220,
             # expand=True,
             # bgcolor=ft.colors.SURFACE_VARIANT,
-            bgcolor=ft.colors.BACKGROUND,
+            # bgcolor=ft.colors.BACKGROUND,
             visible=self.nav_rail_visible,
         )
 
