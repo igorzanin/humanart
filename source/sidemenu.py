@@ -87,7 +87,7 @@ class SideMenu(ft.UserControl):
         self.view = ft.Container(
             content=ft.Column([
                 ft.Row([
-                    ft.Text("Workspace"),
+                    ft.Text("Worksplace"),
                 ], alignment="spaceBetween"),
                 self.workspace_options,
                 self.bottom_nav_rail
