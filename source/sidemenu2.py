@@ -17,11 +17,11 @@ class SideMenu(ft.UserControl):
             ft.ElevatedButton(
                 content=ft.Container(
                     ft.Row([ft.Icon("park_rounded"), ft.Text('Butão 1')]),
-                    expand=True, alignment=ft.alignment.center_left
+                    expand=True, alignment=ft.alignment.center_left,
                 ),
                 height=50,
                 width=220,
-                style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=0)),
+                style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=0), bgcolor=ft.colors.TRANSPARENT, elevation=False),
 
             ),
 
