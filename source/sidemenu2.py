@@ -11,39 +11,32 @@ class SideMenu(ft.UserControl):
         self.visible = True
         self.nav_rail_visible = True
         self.page.on_resize = self.on_resize
+        self.page.on_route_change = self.page_route_change
 
-        self.top_nav_items = [
-            ft.NavigationRailDestination(
-                label_content=ft.Text("Trabalhos"),
-                label="Boards",
-                icon=ft.icons.CONTENT_PASTE_OUTLINED,
-                selected_icon=ft.icons.CONTENT_PASTE,
-            ),
-
-            # ft.NavigationRailDestination(
-            #     icon_content=ft.Icon(ft.icons.HOME_OUTLINED, color="#F8B644", size=30),
-            #     selected_icon_content=ft.Icon(ft.icons.HOME, color="#F8B644", size=30),
-            #     label_content=ft.Text("Menu", color="#F8B644")
-            # ),
-
-            ft.NavigationRailDestination(
-                label_content=ft.Text("Members"),
-                label="Members",
-                icon=ft.icons.PERSON,
-                selected_icon=ft.icons.PERSON,
+        self.top_nav_items = ft.Column([
+            ft.ElevatedButton(
+                content=ft.Container(
+                    ft.Row([ft.Icon("park_rounded"), ft.Text('Butão 1')]),
+                    expand=True, alignment=ft.alignment.center_left
+                ),
+                height=50,
+                width=220,
+                style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=0)),
 
             ),
 
-        ]
-        self.top_nav_rail = ft.NavigationRail(
-            selected_index=None,
-            label_type="all",
-            on_change=self.top_nav_change,
-            destinations=self.top_nav_items,
-            # bgcolor=ft.colors.SURFACE_VARIANT,
-            bgcolor="transparent",
-            extended=True,
-            height=110
+            ft.ElevatedButton(
+                content=ft.Container(
+                    ft.Row([ft.Icon(ft.icons.SOS), ft.Text('Butão 2')]),
+                    expand=True, alignment=ft.alignment.center_left
+                ),
+                height=50,
+                width=220,
+                style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=0)),
+            ),
+
+        ],
+            spacing=0,
         )
 
         self.workspace_options = ft.Column(
@@ -56,7 +49,7 @@ class SideMenu(ft.UserControl):
                             alignment=ft.alignment.center_right,
                             width=200
                         ),
-                        self.top_nav_rail,
+                        self.top_nav_items,
 
                         # divider
                         ft.Container(
@@ -68,21 +61,14 @@ class SideMenu(ft.UserControl):
                         ),
                     ])
 
-        self.bottom_nav_rail = ft.NavigationRail(
-            selected_index=None,
-            label_type="all",
-            on_change=self.bottom_nav_change,
-            extended=True,
-            height=110,
-            # expand=False,
-            # bgcolor=ft.colors.SURFACE_VARIANT,
-            bgcolor="transparent",
-        )
-        self.toggle_nav_rail_button = ft.IconButton(ft.icons.ARROW_BACK)
-        self.page.on_route_change = self.set_styles
 
     def set_styles(self):
         print("olá")
+
+    def page_route_change(self, e=None):
+        troute = ft.TemplateRoute(self.page.route)
+        if troute.match("/"):
+            self.layout.back_button.visible = False
 
     def build(self):
         self.view = ft.Container(
@@ -91,7 +77,6 @@ class SideMenu(ft.UserControl):
                     ft.Text("Workspace"),
                 ], alignment="spaceBetween"),
                 self.workspace_options,
-                self.bottom_nav_rail
             ],
                 # tight=True,
                 scroll=ft.ScrollMode.ALWAYS,

@@ -1,6 +1,6 @@
 import flet as ft
 from appbar import AppBar
-from sidemenu import SideMenu
+from sidemenu2 import SideMenu
 from job_popup import JobPopup
 from utilities.calendar import FletCalendar
 
